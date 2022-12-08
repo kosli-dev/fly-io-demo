@@ -1,6 +1,6 @@
-# fly.toml file generated for twilight-cherry-2773 on 2022-12-07T14:16:34Z
+# fly.toml file generated for kosli-demo on 2022-12-08T08:38:31Z
 
-app = "twilight-cherry-2773"
+app = "kosli-demo"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
