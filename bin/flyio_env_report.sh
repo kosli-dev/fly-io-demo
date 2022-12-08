@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -Eeux
 
 SCRIPT_NAME=flyio_env_report.sh
 

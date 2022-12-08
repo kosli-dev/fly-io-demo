@@ -15,5 +15,4 @@ jobs:
     - uses: superfly/flyctl-actions/setup-flyctl@master
     - name: Report fly.io status to Kosli
       run: |
-        ls
         ./bin/flyio_env_report.sh https://app.kosli.com fly-demo fly-staging
