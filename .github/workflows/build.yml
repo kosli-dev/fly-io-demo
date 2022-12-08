@@ -32,5 +32,5 @@ jobs:
           with:
             context: .
             push: true
-            tags: "${{ env.IMAGE }:${{ env.GITHUB_RUN_ID }}"
+            tags: ${{ env.IMAGE }}:${{ env.GITHUB_RUN_ID }}
             
