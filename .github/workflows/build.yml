@@ -41,5 +41,7 @@ jobs:
           run: kosli pipeline declare --description "fly.io demo image" 
 
         - name: Report to Kosli
-          run: kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 ${{ steps.docker_build.outputs.digest }}
+          run: |
+            ARTIFACT_SHA=$( echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
+            kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
             
