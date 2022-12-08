@@ -37,7 +37,7 @@ jobs:
             tags: ${{ env.IMAGE }}:${{ github.sha }}
 
         - name: Declare pipeline
-          run: kosli pipeline declare -d "fly.io demo image" 
+          run: kosli pipeline declare --description "fly.io demo image" 
 
         - name: Report to Kosli
           run: kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --artifact-type docker 
