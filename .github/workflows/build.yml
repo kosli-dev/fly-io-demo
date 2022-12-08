@@ -9,7 +9,7 @@ env:
 
 jobs:
   build-and-report:
-      name: Deploy app
+      name: Build and report docker image
       runs-on: ubuntu-latest
       steps:
         - name: setup kosli
@@ -26,11 +26,11 @@ jobs:
             username: ${{ secrets.GHCR_USER }}
             password: ${{ secrets.GHCR_TOKEN }}     
 
-        - name: Build and push Docker image to ECR
+        - name: Build and push Docker image to GHCR
           id: docker_build
           uses: docker/build-push-action@v3
           with:
             context: .
             push: true
-            tags: ${{ env.IMAGE }}:${{ env.GITHUB_RUN_ID }}
+            tags: ${{ env.IMAGE }}:${{ github.GITHUB_RUN_ID }}
             
