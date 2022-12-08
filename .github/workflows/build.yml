@@ -13,6 +13,7 @@ jobs:
   build-and-report:
       name: Build and report docker image
       runs-on: ubuntu-latest
+
       steps:
         - name: Setup kosli
           uses: kosli-dev/setup-cli-action@v1
@@ -40,5 +41,5 @@ jobs:
           run: kosli pipeline declare --description "fly.io demo image" 
 
         - name: Report to Kosli
-          run: kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --artifact-type docker 
+          run: kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 ${{ steps.docker_build.outputs.digest }}
             
