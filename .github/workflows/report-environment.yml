@@ -1,6 +1,8 @@
 name: Report fly.io environment
 
 on:
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 env:
