@@ -49,7 +49,9 @@ jobs:
             kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
 
         - name: Reported expected deployment to Kosli
-          run: kosli expect deployment ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
+          run:  |
+            ARTIFACT_SHA=$( echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
+            kosli expect deployment ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
 
         - name: Deploy to fly.io
           run: flyctl deploy --image ${{ env.IMAGE }}:${{ github.sha }} --remote-only
