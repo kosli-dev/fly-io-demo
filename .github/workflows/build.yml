@@ -8,6 +8,7 @@ env:
   KOSLI_OWNER: fly-demo
   KOSLI_PIPELINE: fly-io-demo
   IMAGE: ghcr.io/kosli-dev/fly-io-demo
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
   build-and-report:
@@ -18,6 +19,7 @@ jobs:
         - name: Setup kosli
           uses: kosli-dev/setup-cli-action@v1
         - uses: actions/checkout@v3
+        - uses: superfly/flyctl-actions/setup-flyctl@master
         
         - name: Set up Docker Buildx (buildkit) runner
           uses: docker/setup-buildx-action@v2
@@ -44,4 +46,7 @@ jobs:
           run: |
             ARTIFACT_SHA=$( echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
             kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
+
+        - run: flyctl deploy --image ${{ env.IMAGE }}:${{ github.sha }} --remote-only
             
+        
