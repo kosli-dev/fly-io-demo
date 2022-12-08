@@ -1,0 +1,36 @@
+name: Build and report an artifact
+on:
+  push:
+    branches:
+      - main
+env:
+  KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
+  IMAGE: ghcr.io/kosli-dev/fly-io-demo
+
+jobs:
+  build-and-report:
+      name: Deploy app
+      runs-on: ubuntu-latest
+      steps:
+        - name: setup kosli
+          uses: kosli-dev/setup-cli-action@v1
+        - uses: actions/checkout@v3
+        
+        - name: Set up Docker Buildx (buildkit) runner
+          uses: docker/setup-buildx-action@v2
+
+        - name: Login to GitHub Container Registry
+          uses: docker/login-action@v1
+          with:
+            registry: ghcr.io
+            username: ${{ secrets.GHCR_USER }}
+            password: ${{ secrets.GHCR_TOKEN }}     
+
+        - name: Build and push Docker image to ECR
+          id: docker_build
+          uses: docker/build-push-action@v3
+          with:
+            context: .
+            push: true
+            tags: "${{ env.IMAGE }:${{ env.GITHUB_RUN_ID }}"
+            
