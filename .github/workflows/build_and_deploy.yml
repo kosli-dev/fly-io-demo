@@ -7,12 +7,13 @@ env:
   KOSLI_API_TOKEN: ${{ secrets.KOSLI_API_TOKEN }}
   KOSLI_OWNER: fly-demo
   KOSLI_PIPELINE: fly-io-demo
+  KOSLI_ENVIRONMENT: fly-staging
   IMAGE: ghcr.io/kosli-dev/fly-io-demo
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
   build-and-report:
-      name: Build and report docker image
+      name: Build and deploy docker image
       runs-on: ubuntu-latest
 
       steps:
@@ -42,11 +43,15 @@ jobs:
         - name: Declare pipeline
           run: kosli pipeline declare --description "fly.io demo image" 
 
-        - name: Report to Kosli
+        - name: Report artifact to Kosli
           run: |
             ARTIFACT_SHA=$( echo ${{ steps.docker_build.outputs.digest }} | sed 's/.*://')
             kosli pipeline artifact report creation ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
 
-        - run: flyctl deploy --image ${{ env.IMAGE }}:${{ github.sha }} --remote-only
+        - name: Reported expected deployment to Kosli
+          run: kosli expect deployment ${{ env.IMAGE }}:${{ github.sha }} --sha256 $ARTIFACT_SHA
+
+        - name: Deploy to fly.io
+          run: flyctl deploy --image ${{ env.IMAGE }}:${{ github.sha }} --remote-only
             
         
